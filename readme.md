@@ -58,9 +58,9 @@ METHOD - GET
 
 `interp_func = interp1d(timestamps, states, kind='nearest', fill_value='extrapolate')` 
 
-- On X-axis - Timestamp 
+- On X-axis - Timestamp ( timestamps )
 
-- On Y-axis - Either 0 (for inactive) or 1 (for active) is stored 
+- On Y-axis - Either 0 (for inactive) or 1 (for active) is stored ( states ) 
 
 2. Now to calculate last hour uptime used the following logic : 
 
