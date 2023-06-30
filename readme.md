@@ -1,7 +1,7 @@
 ## Steps to Get Started 
 
-`git clone https://github.com/aryangupta701/django-monitoring-restro/
- cd django-monitoring-restro
+`git clone https://github.com/aryangupta701/django-monitoring-restro/\n
+ cd django-monitoring-restro\n
  source ../bin/env
  `
 
