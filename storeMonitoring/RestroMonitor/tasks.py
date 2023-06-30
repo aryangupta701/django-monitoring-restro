@@ -20,7 +20,6 @@ def get_store_timezone(store_id):
         store_timezone = StoreTimezone.objects.get(store_id=store_id)
         return pytz.timezone(store_timezone.timezone_str)
     except Exception as e:
-        print(e)
         return pytz.timezone("America/Chicago")
 
 def convertTimeToUTC(time_local, timezone):
@@ -53,9 +52,14 @@ def calculate_timestamps(start_time, end_time,interval, working_hours_utc ):
         dt_time = datetime.utcfromtimestamp(timestamp).time()
         flag = False
         for openTime, closeTime in working_hours_utc:
-            if(dt_time >= openTime and dt_time<=closeTime):
+            if(openTime > closeTime):
+                if not (dt_time >= closeTime and dt_time<=openTime):
+                    flag = True
+                    break 
+            elif (dt_time >= openTime and dt_time<=closeTime):
                 flag = True
                 break
+
         if(flag):
             interpolated_timestamps.append(timestamp)
     return np.array(interpolated_timestamps)
@@ -66,7 +70,7 @@ def getDurations(interp_func, working_hours_utc, start_time, end_time):
     interpolated_states = interp_func(interpolated_timestamps)
 
     active_duration = np.sum(interpolated_states) * interval
-    inactive_duration = len(interpolated_timestamps) - active_duration
+    inactive_duration = len(interpolated_timestamps) * interval - active_duration
     return [active_duration, inactive_duration]
 
 def getDurationsForHour(interp_func, working_hours_utc, max_timestamp_utc):
@@ -93,6 +97,7 @@ def getInterpolationFunction(store_id, max_timestamp_utc):
     timestamps = []
     states = []
     for record in filtered_records:
+        # print(record)
         timestamps.append(record.timestamp_utc.timestamp())
         states.append(1 if record.status == 'active' else 0)
 
@@ -106,7 +111,6 @@ def processStore(store_id, max_timestamp_utc):
     last_hour = getDurationsForHour(interp_func, working_hours_utc, max_timestamp_utc)
     last_day = getDurationsForDay(interp_func, working_hours_utc, max_timestamp_utc)
     last_week = getDurationsForWeek(interp_func, working_hours_utc, max_timestamp_utc)
-
     data = {
         "store_id": store_id,
         "uptime_last_hour" : last_hour[0]/60,
@@ -122,18 +126,19 @@ def processStore(store_id, max_timestamp_utc):
 
 def startReportGeneration(distinct_store_ids, max_timestamp_utc):
     frames = []
-    i=0
+    # i=100
     for store_id in distinct_store_ids:
         print(store_id['store_id'])
-        if(i>100):
-            break
-        i+=1
+        # if(i>100):
+        #     break 
+        # i+=1
         try:
             data = processStore(store_id['store_id'], max_timestamp_utc)
-            # data = processStore('1136568205036649988', max_timestamp_utc)
+            # data = processStore('2367299134091594697', max_timestamp_utc)
             frames.append(data); 
         except Exception as e:
             print(e)
+        
         
     return pd.concat(frames, ignore_index=True)
     
@@ -142,6 +147,7 @@ def generate_report(report_id):
     try:
         report = Report.objects.get(report_id=report_id)
         max_timestamp_utc = loadCurrentDate()
+        print("Maximum Time in Status Data", max_timestamp_utc)
         print(report)
         dataframe = startReportGeneration(getStoreIds(), max_timestamp_utc)
         print(dataframe)
