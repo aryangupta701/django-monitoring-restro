@@ -1,10 +1,10 @@
 ## Steps to Get Started 
 
-`git clone https://github.com/aryangupta701/django-monitoring-restro/\n
- cd django-monitoring-restro\n
- source ../bin/env
- `
+1. Clone Repo: `git clone https://github.com/aryangupta701/django-monitoring-restro/`
 
+2. Switch to Project Directory: `cd django-monitoring-restro`
+ 
+3. Activate Environment: `source ../bin/activate`
 
 ## Pre-requisites 
 
