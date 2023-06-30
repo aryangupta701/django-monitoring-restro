@@ -126,12 +126,12 @@ def processStore(store_id, max_timestamp_utc):
 
 def startReportGeneration(distinct_store_ids, max_timestamp_utc):
     frames = []
-    # i=100
+    i=0
     for store_id in distinct_store_ids:
         print(store_id['store_id'])
-        # if(i>100):
-        #     break 
-        # i+=1
+        if(i>100):
+            break 
+        i+=1
         try:
             data = processStore(store_id['store_id'], max_timestamp_utc)
             # data = processStore('2367299134091594697', max_timestamp_utc)
