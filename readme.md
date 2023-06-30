@@ -8,7 +8,7 @@
 
 ## Pre-requisites 
 
-In data folder add -
+In the data folder add -
 
 - Menuhours.csv
 
@@ -46,7 +46,7 @@ METHOD - GET
 `http://127.0.0.1:8000/get_report/<report-id>`
 
 
-##  logic for computing the hours overlap and uptime/downtime
+##  Logic for computing the hours overlap and uptime/downtime
 
 1. Every time is converted into UTC before use 
 
@@ -62,13 +62,13 @@ METHOD - GET
 
 - On Y-axis - Either 0 (for inactive) or 1 (for active) is stored ( states ) 
 
-2. Now to calculate last hour uptime used the following logic : 
+2. Now to calculate last-hour uptime used the following logic : 
 
 - Iterated over each second in the last hour and checked if the timestamp of the second is within the range of working hours of that day or not. 
 
-- If it is in the range then append it in the `interpolated_timestamps` array 
+- If it is in the range then append it to the `interpolated_timestamps` array 
 
-- Now pass this function to the interpolation object and we will get the predicted values of each timestamp in `interpolated_states` which consits of either 0 or 1. 
+- Now pass this array to the interpolation object and it will return the predicted values of each timestamp in `interpolated_states` which consists of either 0 or 1. 
 
 - Now uptime can be calculated by adding the whole `interpolated_states` array 
 
@@ -76,4 +76,4 @@ METHOD - GET
 
 3. The same logic is used for the calculation of last day and last week. 
 
-4. At the the uptime and downtime which was calculated in seconds is converted into the required format (hours or minutes )
+4. At the uptime and downtime which were calculated in seconds and converted into the required format (hours or minutes )
