@@ -52,7 +52,7 @@ METHOD - GET
 
 2. To get all the unique store_id the database table store_status is used 
 
-- To Calculate uptime/downtime for each store_id the following logic is being used : 
+### To Calculate uptime/downtime for each store_id the following logic is being used : 
 
 1. An interpolation curve is being formed with points defined as timestamps (in seconds) of the poll of previous 10 days using scipy using the following code 
 
