@@ -1,0 +1,7 @@
+/storeMonitoring/reports
+
+/storeMonitoring/management/commands/data/
+
+/storeMonitoring/RestroMonitor/management/commands/data/*
+
+/storeMonitoring/db.sqlite3
